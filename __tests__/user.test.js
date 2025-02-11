@@ -71,4 +71,21 @@ describe("User API", () => {
       expect(response.status).toBe(404);
     });
   });
+
+  // Test 3: Updating a user
+  describe("PUT /api/users/:id", () => {
+    it("should update user details", async () => {
+      const user = await request(app).post("/api/users").send({
+        name: "Test User",
+        email: "test@example.com",
+      });
+
+      const response = await request(app).put(`/api/users/${user.body._id}`).send({
+        name: "New Name for Test User"
+      })
+      
+      expect(response.status).toBe(200);
+      expect(response.body.name).toBe("New Name for Test User");
+    });
+  });
 });
