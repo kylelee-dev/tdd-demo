@@ -74,16 +74,23 @@ describe("User API", () => {
 
   // Test 3: Updating a user
   describe("PUT /api/users/:id", () => {
+    let user;
+    beforeEach(async () => {
+      const userData = {
+        name: "Test User1",
+        email: "test1@example.com",
+      };
+      user = await request(app).post("/api/users").send(userData);
+      userId = user.body._id;
+    });
     it("should update user details", async () => {
-      const user = await request(app).post("/api/users").send({
-        name: "Test User",
-        email: "test@example.com",
-      });
+      console.log(user);
+      const response = await request(app)
+        .put(`/api/users/${user.body._id}`)
+        .send({
+          name: "New Name for Test User",
+        });
 
-      const response = await request(app).put(`/api/users/${user.body._id}`).send({
-        name: "New Name for Test User"
-      })
-      
       expect(response.status).toBe(200);
       expect(response.body.name).toBe("New Name for Test User");
     });
